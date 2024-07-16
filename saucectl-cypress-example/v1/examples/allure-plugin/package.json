@@ -1,0 +1,6 @@
+{
+  "name": "saucectl-allure-example",
+  "dependencies": {
+    "allure-cypress": "2.15.1"
+  }
+}
