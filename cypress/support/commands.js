@@ -65,36 +65,50 @@ Cypress.Commands.add('recursionLoop', { times: 'optional' }, function (fn, times
 Cypress.Commands.add('pdfNextStepLoop', () => {
   var waitingTime = 300
   // 迴圈按 下一頁
-  var needClick = true;
+  let needClick = true;
   cy.recursionLoop(times => {
       cy.wait(waitingTime);
-      cy.isElementExist('app-preview-dialog > .modal-footer > .row > div > .btn.btn-primary').then((isExist) => {
-          cy.get('app-preview-dialog > .modal-body').scrollTo('bottom', { easing: 'linear', duration: waitingTime }).click();
-          if (isExist) {
-              needClick = true;
-              cy.get('app-preview-dialog > .modal-footer > .row > div > .btn.btn-primary').click({ force: true });
-          } else {
+      // 有滾輪
+      cy.isElementExist('app-preview-dialog > .modal-body').then((isExist) => {
+        if (isExist) {
+          cy.get('app-preview-dialog > .modal-body').scrollTo('bottom', { easing: 'linear', duration: waitingTime }).click();     
+              
+          // 有關閉, 直接關閉結束
+          cy.isElementExist('app-preview-dialog > .modal-footer > .row > div > .btn.btn-secondary').then((isExist) => {
+            if (isExist) {
+              cy.get('app-preview-dialog > .modal-footer > .row > div > .btn.btn-secondary').click();
               needClick = false;
-          }
-      });
+            } else {
+              // 有下一頁
+              cy.isElementExist('app-preview-dialog > .modal-footer > .row > div > .btn.btn-primary').then((isExist) => {
+                if (isExist) {
+                  cy.get('app-preview-dialog > .modal-footer > .row > div > .btn.btn-primary').click();
+                  needClick = true;
+                } else {
+                  cy.get('app-preview-dialog > .modal-footer > .row > div > .btn.btn-success').click();
+                  needClick = false;
+                }
+              });
+            }
+          });
+        }
+      })
+      
       return needClick;
   });
 })
 
 /* 
   尋找左邊工具列有沒有符合名稱的按鈕
-  @return true-找到 false-沒找到
+  @return object-找到 null-沒找到
 */
 Cypress.Commands.add('findLeftSideBar', (btnName) => {
   return cy.get('.page__sidebar-items').children().then(($children)=>{
-    let found = false
+    let found = null
     $children.each( (index, $el) => {
       if ($el.innerText.indexOf(btnName)>-1) {
-        const myEl = Cypress.$($el)
-        if (myEl.find('i.ri-check-line').length>0) {
-          found = true
-          return false
-        }
+        found = Cypress.$($el)
+        return false
       }
     })
     return found

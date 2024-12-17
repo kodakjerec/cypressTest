@@ -78,6 +78,12 @@
         "emailLocal": "testdata",
         "emailDomain": "xxx.com"
     },
+    "noteAndInsuredRecord": {
+        "__comments__": "question_1 適用於 身心障礙",
+        "question_1": "N",
+        "__comments2__": "question_3 適用於 監護宣告",
+        "question_3": "N"
+    },
     "bank": {
         "bankCode": "004",
         "branchCode": "0040565",
