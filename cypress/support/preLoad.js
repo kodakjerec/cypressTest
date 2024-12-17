@@ -6,10 +6,8 @@
 // 出錯一次就停止
 beforeEach(() => {
     cy.on('fail', (error) => {
-        // 输出错误信息到控制台
-        alert(error.message);
-        cy.screenshot();
-        Cypress.runner.stop(); // 停止当前测试
+        // console.log(error.message); // 输出错误信息到控制台
+        // Cypress.runner.stop(); // 停止当前测试
         throw error; // 斷言故意失敗, 輸出(X)
     });
 });

@@ -5,10 +5,18 @@ module.exports = {
     baseUrl: 'http://10.67.67.108/',
     defaultCommandTimeout: 1000,
     trashAssetsBeforeRuns: false,
-    video: false,
-    videoCompression: true,
     testIsolation: false,
     experimentalInteractiveRunEvents: true,
-    expertmentalStudio: true
+    expertmentalStudio: true,
+    // video
+    video: true,
+    videosFolder: 'results/videos',
+    videoCompression: true,
+    // screenshot
+    screenshotsFolder: 'results/screenshots',
+    screenshots: {
+      enabled: true,
+      on: 'failure'
+    }
   },
 }

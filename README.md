@@ -4,7 +4,7 @@
 安裝
 
 2. `npx cypress open`  
-執行cypess
+執行cypess GUI
 
 # 客製化
 ## 更改目的地主機  
