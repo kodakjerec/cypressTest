@@ -1,0 +1,31 @@
+pipeline {
+    agent any
+    
+    tools {
+        nodejs 'nodejs 23.0.0'
+    }
+    
+    environment {
+        HOME = '.'
+    }
+    
+    stages {
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm i'
+            }
+        }
+        
+        stage('Run Cypress Tests') {
+            steps {
+                sh 'npx cypress run --spec "cypress/e2e/2-UAT/0.0.0-sample.cy.js"'
+            }
+        }
+    }
+    
+    post {
+        always {
+            archiveArtifacts artifacts: 'cypress/videos/**/*.mp4,cypress/screenshots/**/*.png', allowEmptyArchive: true
+        }
+    }
+}
