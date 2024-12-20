@@ -44,15 +44,15 @@ context('輸入測試', () => {
      */
     it('登入', () => {
         cy.visit('/mbis2/#/login')
-        cy.get('#uname').type('A134967300')
-        cy.get('#pin').type('123456')
+        // cy.visit('/mbis/#/login?admin=TGL@70817744@tgl')
+        cy.get('#uname').type(testData.userId)
+        cy.get('#pin').type(testData.pin)
         solver()
         cy.get('.btn').click().wait(longSleep)
     })
 
     it('新增 行動投保', () => {
         if (newRecord) {
-            mainStep = 1
             cy.get('.order-lg-1 > .card > .card-body > :nth-child(1) > :nth-child(1) > .me-2 > .row > a > .avatar-md > .avatar-title').click({ force: true })
         }
     })
@@ -74,7 +74,6 @@ context('資料輸入', () => {
         cy.wait(shortSleep)
         Cypress.env('itsMe',false)
         cy.get('div[data-swiper-slide-index="0"]').then(($headerElement) => {
-            console.log($headerElement)
             if ($headerElement.hasClass('step__item--last')) {
                 Cypress.env('itsMe',true)
             } else {
@@ -102,9 +101,7 @@ context('資料輸入', () => {
                 // 同意書
                 cy.isElementExist('app-preview-dialog > .modal-footer > .row > div > button.btn-success').then((isExist) => {
                     if (isExist) {
-                    cy.pdfNextStepLoop()
-                    
-                    cy.get('app-preview-dialog > .modal-footer > .row > div > button.btn-success').click({ force: true })
+                        cy.pdfNextStepLoop()
                     }
                 })
 
@@ -118,7 +115,7 @@ context('資料輸入', () => {
 
                 cy.get('select[formcontrolname="baseInfoMarry"]').select(testData.insured.baseInfoMarry)
                 if (testData.insured.baseInfoNationality=="中華民國")
-                    cy.get('select[formcontrolname="baseInfoNationalIsROC"]').check()
+                    cy.get('input[formcontrolname="baseInfoNationalIsROC"]').check()
                 else
                     cy.get('select[formcontrolname="baseInfoNationality"]').select(testData.insured.baseInfoNationality)
                 cy.get('input[formcontrolname="serviceUnit"]').clear().type(testData.insured.serviceUnit)
@@ -127,13 +124,13 @@ context('資料輸入', () => {
                 cy.get('input[formcontrolname="partTimeDetail"]').clear().type(testData.insured.partTimeDetail)
 
                 // 正職職業代碼 A101
-                cy.get('button[formcontrolname="jobInfoCareerFull"]').click()
+                cy.get('input[formcontrolname="jobInfoCareerFull"]').click()
                 cy.get('button.btn-info').eq(0).click().wait(200)
                 cy.get('tbody > :nth-child(1) > .align-items-center > .form-check-input').click()
                 cy.get('.modal-footer > .btn').click()
 
                 // 間職職業代碼 A102
-                cy.get('button[formcontrolname="parttimeJobOccupyFull"]').click()
+                cy.get('input[formcontrolname="parttimeJobOccupyFull"]').click()
                 cy.get('button.btn-info').eq(0).click().wait(200)
                 cy.get('tbody > :nth-child(1) > .align-items-center > .form-check-input').click()
                 cy.get('.modal-footer > .btn').click()
@@ -159,7 +156,12 @@ context('資料輸入', () => {
 
                 // finally
                 cy.get('.page__content__btn > button.btn-danger').click()
-                cy.get('.modal-footer > .btn-primary').click()
+                // 如果有任何警告視窗,那就按
+                cy.isElementExist('app-warning-dialog > .modal-footer > .btn-primary').then((isExist) => {
+                    if (isExist) {
+                        cy.get('app-warning-dialog > .modal-footer > .btn-primary').click()
+                    }
+                })
             } else {
                 console.log(`${testConponentText} 找不到`)
             }
@@ -203,23 +205,21 @@ context('資料輸入', () => {
                 cy.get('input[formcontrolname="partTimeDetail"]').clear().type(testData.proposer.partTimeDetail)
 
                 // 正職職業代碼 A101
-                cy.get('button[formcontrolname="jobOccupyFull"]').click()
+                cy.get('input[formcontrolname="jobOccupyFull"]').click()
                 cy.get('button.btn-info').eq(0).click().wait(200)
                 cy.get('tbody > :nth-child(1) > .align-items-center > .form-check-input').click()
                 cy.get('.modal-footer > .btn').click()
 
                 // 間職職業代碼 A102
-                cy.get('button[formcontrolname="parttimeJobOccupyFull"]').click()
+                cy.get('input[formcontrolname="parttimeJobOccupyFull"]').click()
                 cy.get('button.btn-info').eq(0).click().wait(200)
                 cy.get('tbody > :nth-child(1) > .align-items-center > .form-check-input').click()
                 cy.get('.modal-footer > .btn').click()
 
                 // 電話
-                cy.get('select[formcontrolname="phoneLight"]').select(testData.proposer.phoneLight)
                 cy.get('input[formcontrolname="phoneNumberLightArea"]').clear().type(testData.proposer.phoneNumberLightArea)
                 cy.get('input[formcontrolname="phoneNumberLight"]').clear().type(testData.proposer.phoneNumberLight)
                 cy.get('input[formcontrolname="phoneNumberLightExt"]').clear().type(testData.proposer.phoneNumberLightExt)
-                cy.get('select[formcontrolname="phoneNight"]').select(testData.proposer.phoneNight)
                 cy.get('input[formcontrolname="phoneNumberNightArea"]').clear().type(testData.proposer.phoneNumberNightArea)
                 cy.get('input[formcontrolname="phoneNumberNight"]').clear().type(testData.proposer.phoneNumberNight)
                 cy.get('input[formcontrolname="phoneNumberNightExt"]').clear().type(testData.proposer.phoneNumberNightExt)
@@ -243,7 +243,12 @@ context('資料輸入', () => {
 
                 // finally
                 cy.get('.page__content__btn > button.btn-danger').click()
-                cy.get('.modal-footer > .btn-primary').click()
+                // 如果有任何警告視窗,那就按
+                cy.isElementExist('app-warning-dialog > .modal-footer > .btn-primary').then((isExist) => {
+                    if (isExist) {
+                        cy.get('app-warning-dialog > .modal-footer > .btn-primary').click()
+                    }
+                })
             } else {
                 console.log(`${testConponentText} 找不到`)
             }
@@ -301,9 +306,6 @@ context('資料輸入', () => {
                 cy.get('.input-group > :nth-child(1) > .form-control').type('150')
                 cy.get('.modal-footer > .btn-primary').click()
 
-                cy.get('#question_2_2').check()
-                cy.get('#question_5_2').check()
-
                 // finally
                 cy.get('.page__content__btn > button.btn-danger').click().wait(shortSleep)
             } else {
@@ -327,6 +329,14 @@ context('資料輸入', () => {
                 } else {
                     findItem.click()
                 }
+
+                // 要保書填寫說明
+                // 如果有任何警告視窗,那就按
+                cy.isElementExist('app-preview-dialog > .modal-footer > .btn-primary').then((isExist) => {
+                    if (isExist) {
+                        cy.get('app-preview-dialog > .modal-footer > .btn-primary').click()
+                    }
+                })
 
                 // 身心障礙
                 cy.isElementExist('input[formcontrolname="question_1"]').then((isExist) => {
@@ -457,7 +467,10 @@ context('資料輸入', () => {
                             cy.get('input[formcontrolname="name"]').type(testData.beneficiary.name)
                             cy.get('input[formcontrolname="romanName"]').type(testData.beneficiary.romanName)
                             cy.get('input[formcontrolname="idNo"]').type(testData.beneficiary.idNo)
-                            cy.get('select[formcontrolname="infoNational"]').select(testData.beneficiary.infoNational)
+                            if (testData.beneficiary.infoNational=="中華民國")
+                                cy.get('input[formcontrolname="infoNationalIsROC"]').check()
+                            else
+                                cy.get('select[formcontrolname="infoNationalOtherDesc"]').select(testData.beneficiary.infoNational)
                             cy.get('.mat-datepicker-input').type(testData.beneficiary.birthday)
                             cy.get('select[formcontrolname="addrCity"]').select(testData.beneficiary.addrCity)
                             cy.get('select[formcontrolname="addrDistrict"]').select(testData.beneficiary.addrDistrict)
@@ -493,7 +506,10 @@ context('資料輸入', () => {
                             cy.get('input[formcontrolname="name"]').type(testData.beneficiary.name)
                             cy.get('input[formcontrolname="romanName"]').type(testData.beneficiary.romanName)
                             cy.get('input[formcontrolname="idNo"]').type(testData.beneficiary.idNo)
-                            cy.get('select[formcontrolname="infoNational"]').select(testData.beneficiary.infoNational)
+                            if (testData.beneficiary.infoNational=="中華民國")
+                                cy.get('input[formcontrolname="infoNationalIsROC"]').check()
+                            else
+                                cy.get('select[formcontrolname="infoNationalOtherDesc"]').select(testData.beneficiary.infoNational)
                             cy.get('.mat-datepicker-input').type(testData.beneficiary.birthday)
                             cy.get('select[formcontrolname="financialData"]').select(testData.bank.bankCode)
                             cy.get('select[formcontrolname="branch"]').select(testData.bank.branchCode)
@@ -557,13 +573,13 @@ context('資料輸入', () => {
 
                 // 新增病例
                 cy.get('.col-md-2 > .btn').click()
-                cy.get('input[formcontrolname="sickName"]').clear().type(testData.sickInfoList.sickName)
-                cy.get('input[formcontrolname="hospital"]').clear().type(testData.sickInfoList.hospital)
-                cy.get('input[formcontrolname="treatmentYear"]').clear().type(testData.sickInfoList.treatmentYear)
-                cy.get('input[formcontrolname="treatmentMonth"]').clear().type(testData.sickInfoList.treatmentMonth)
-                cy.get('input[formcontrolname="treatmentDay"]').clear().type(testData.sickInfoList.treatmentDay)
-                cy.get('input[formcontrolname="treatmentWay"]').clear().type(testData.sickInfoList.treatmentWay)
-                cy.get('input[formcontrolname="treatmentResults"]').clear().type(testData.sickInfoList.treatmentResults)
+                cy.get('input[name="sickName"]').clear().type(testData.sickInfoList.sickName)
+                cy.get('input[name="hospital"]').clear().type(testData.sickInfoList.hospital)
+                cy.get('input[name="treatmentYear"]').clear().type(testData.sickInfoList.treatmentYear)
+                cy.get('input[name="treatmentMonth"]').clear().type(testData.sickInfoList.treatmentMonth)
+                cy.get('input[name="treatmentDay"]').clear().type(testData.sickInfoList.treatmentDay)
+                cy.get('input[name="treatmentWay"]').clear().type(testData.sickInfoList.treatmentWay)
+                cy.get('input[name="treatmentResults"]').clear().type(testData.sickInfoList.treatmentResults)
                 cy.get('.modal-footer > :nth-child(2)').click()
 
                 // finally
@@ -719,7 +735,7 @@ context('資料輸入', () => {
             return
         }
 
-        testConponentText = 'CRS'
+        testConponentText = 'CRS自我證明表'
         cy.findLeftSideBar(testConponentText).then((findItem) =>{
             if (findItem!=null) {
                 if (findItem.find('div.page__sidebar-btn--completeCheck').length>0) {
@@ -729,9 +745,10 @@ context('資料輸入', () => {
                     findItem.click()
                 }
 
-                // 重要提示
+                // 自我證明表-個人 Self-Certification Form – Individua
                 cy.get('.d-flex > .btn').click()
                 cy.get('.modal-footer > .btn').click()
+
                 // 個人帳戶
                 cy.get('input[formcontrolname="lastName"]').clear().type(testData.insured.lastName)
                 cy.get('input[formcontrolname="firstName"]').clear().type(testData.insured.firstName)
@@ -789,7 +806,14 @@ context('資料輸入', () => {
                     cy.get($tab).click().wait(100)
 
                     cy.get(':nth-child(1) > .form-check > .form-check-label').click()
-                    cy.get('.mat-datepicker-input').type('1130510')
+
+                    // 審閱期至少三日
+                    let today = new Date()
+                    today.setDate(today.getDate() - 4)
+                    let year = today.getFullYear()-1911
+                    let month = (today.getMonth()+1).toString().padStart(2,'0')
+                    let day = today.getDate().toString().padStart(2,'0')
+                    cy.get('.mat-datepicker-input').type(year+month+day)
                 })
 
                 // finally

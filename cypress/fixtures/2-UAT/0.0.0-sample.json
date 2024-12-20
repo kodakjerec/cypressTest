@@ -1,7 +1,7 @@
 {
     "__comments__": "cypress測試用, 與傳給後端內容一定有不同",
-    "userId": "A110916712",
-    "pin": "直",
+    "userId": "A134967300",
+    "pin": "123456",
     "insured": {
         "tid": "CAB96F0743C000018D7812D0154018D3",
         "baseInfoName": "簡克達",
