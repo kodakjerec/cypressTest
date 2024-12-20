@@ -61,14 +61,15 @@ context('輸入測試', () => {
         if (!newRecord) {
             cy.get(':nth-child(' + editOrderNo + ') > :nth-child(6) > :nth-child(1) > .ri-edit-2-line').click({ force: true })
 
-            cy.isElementExist('app-normal-dialog > div > .btn-primary').then((isExist) => {
+            cy.isElementExist('app-normal-dialog button.btn-primary').then((isExist) => {
             if (isExist) {
-                cy.get('app-normal-dialog > div > .btn-primary').click()
+                cy.get('app-normal-dialog button.btn-primary').click()
             }
             })
         }
     })
 })
+
 context('資料輸入', () => {
     it('check',() => {
         cy.wait(shortSleep)
@@ -99,7 +100,7 @@ context('資料輸入', () => {
                     findItem.click()
                 }
                 // 同意書
-                cy.isElementExist('app-preview-dialog > .modal-footer > .row > div > button.btn-success').then((isExist) => {
+                cy.isElementExist('app-preview-dialog button.btn-success').then((isExist) => {
                     if (isExist) {
                         cy.pdfNextStepLoop()
                     }
@@ -157,9 +158,9 @@ context('資料輸入', () => {
                 // finally
                 cy.get('.page__content__btn > button.btn-danger').click()
                 // 如果有任何警告視窗,那就按
-                cy.isElementExist('app-warning-dialog > .modal-footer > .btn-primary').then((isExist) => {
+                cy.isElementExist('app-warning-dialog button.btn-primary').then((isExist) => {
                     if (isExist) {
-                        cy.get('app-warning-dialog > .modal-footer > .btn-primary').click()
+                        cy.get('app-warning-dialog button.btn-primary').click()
                     }
                 })
             } else {
@@ -244,9 +245,9 @@ context('資料輸入', () => {
                 // finally
                 cy.get('.page__content__btn > button.btn-danger').click()
                 // 如果有任何警告視窗,那就按
-                cy.isElementExist('app-warning-dialog > .modal-footer > .btn-primary').then((isExist) => {
+                cy.isElementExist('app-warning-dialog button.btn-primary').then((isExist) => {
                     if (isExist) {
-                        cy.get('app-warning-dialog > .modal-footer > .btn-primary').click()
+                        cy.get('app-warning-dialog button.btn-primary').click()
                     }
                 })
             } else {
@@ -332,9 +333,9 @@ context('資料輸入', () => {
 
                 // 要保書填寫說明
                 // 如果有任何警告視窗,那就按
-                cy.isElementExist('app-preview-dialog > .modal-footer > .btn-primary').then((isExist) => {
+                cy.isElementExist('app-preview-dialog button.btn-primary').then((isExist) => {
                     if (isExist) {
-                        cy.get('app-preview-dialog > .modal-footer > .btn-primary').click()
+                        cy.get('app-preview-dialog button.btn-primary').click()
                     }
                 })
 
@@ -483,8 +484,8 @@ context('資料輸入', () => {
                             cy.get('input[formcontrolname="forPay"]').check()
                             cy.get('input[formcontrolname="quotaInsurance"]').type(testData.beneficiary.quotaInsurance)
                             cy.get('.btn-info').click()
-                            cy.get('app-yes-no-dialog > .modal-footer > .btn-secondary').click()
-                            cy.get('app-warning-dialog > .modal-footer > .btn-primary').click()
+                            cy.get('app-yes-no-dialog button.btn-secondary').click()
+                            cy.get('app-warning-dialog button.btn-primary').click()
                         }
                     })
 
@@ -516,8 +517,8 @@ context('資料輸入', () => {
                             cy.get('input[formcontrolname="accountNumber"]').type(testData.bank.account)
 
                             cy.get('.btn-info').click()
-                            cy.get('app-yes-no-dialog > .modal-footer > .btn-secondary').click()
-                            cy.get('app-warning-dialog > .modal-footer > .btn-primary').click()
+                            cy.get('app-yes-no-dialog button.btn-secondary').click()
+                            cy.get('app-warning-dialog button.btn-primary').click()
                         }
                     })
                 })
@@ -1011,9 +1012,9 @@ context('資料輸入', () => {
 
                 // 新增
                 cy.get('.card-body > .btn').click()
-                cy.get('select[formcontrolname="questionSelect"]').select("Q-0001")
-                cy.get('select[formcontrolname="insuredSelect"]').select(testData.insured.baseInfoName)
-                cy.get('button[formcontrolname="next"]').click()
+                cy.get('select[name="questionSelect"]').select("Q-0001")
+                cy.get('select[name="insuredSelect"]').select(testData.insured.baseInfoName)
+                cy.get('button[name="next"]').click()
 
                 // 填寫
                 // 1.
@@ -1080,7 +1081,7 @@ context('資料輸入', () => {
                 cy.get('input[formcontrolname="hospitalLocation"]').clear().type("台北市公館區")
                 cy.get('textarea[formcontrolname="medicalRecordNumber"]').type("RX-78-G3")
 
-                cy.get('button[formcontrolname="next"]').click()
+                cy.get('button[name="next"]').click()
 
                 // finally
                 cy.get('.page__content__btn > button.btn-danger').click()
@@ -1100,23 +1101,30 @@ context('資料輸入', () => {
         }
 
         cy.wait(shortSleep)
-        // 主動按下 檢核儲存
-        cy.intercept('**/case/flow-step*').as('caseFlowStep')
-        cy.intercept('**/insurance/updateInsuranceRecord*').as('checkUpdateRecord')
-        cy.get('div.page__content__btn.bottom-0.end-0 > button.btn-danger[idf="cbWFS"]').click()
-        cy.wait('@checkUpdateRecord').then( (interception) => {
-            // 是否進入文件預覽
-            cy.isElementExist('app-yes-no-dialog > .modal-footer > .btn-primary').then((isExist) => {
-                if (isExist) {
-                    cy.get('app-yes-no-dialog > .modal-footer > .btn-primary').click()
-                }
-            })
-            // 如果有任何警告視窗,那就按
-            cy.isElementExist('app-base-dialog > .modal-footer > .btn-primary').then((isExist) => {
-                if (isExist) {
-                    cy.get('app-base-dialog > .modal-footer > .btn-primary').click()
-                }
-            })
+        // 是否進入文件預覽
+        cy.isElementExist('app-yes-no-dialog button.btn-primary').then((isExist) => {
+            if (isExist) {
+                cy.get('app-yes-no-dialog button.btn-primary').click()
+            } else {
+                // 主動按下 檢核儲存
+                cy.intercept('**/case/flow-step*').as('caseFlowStep')
+                cy.intercept('**/insurance/updateInsuranceRecord*').as('checkUpdateRecord')
+                cy.get('div.page__content__btn.bottom-0.end-0 > button.btn-danger').click()
+                cy.wait('@checkUpdateRecord').then( (interception) => {
+                    // 是否進入文件預覽
+                    cy.isElementExist('app-yes-no-dialog button.btn-primary').then((isExist) => {
+                        if (isExist) {
+                            cy.get('app-yes-no-dialog button.btn-primary').click()
+                        }
+                    })
+                    // 如果有任何警告視窗,那就按
+                    cy.isElementExist('app-base-dialog button.btn-primary').then((isExist) => {
+                        if (isExist) {
+                            cy.get('app-base-dialog button.btn-primary').click()
+                        }
+                    })
+                })
+            }
         })
         cy.wait('@caseFlowStep').then((interception) => {})
     })
@@ -1140,6 +1148,9 @@ context('文件預覽', () => {
         if(!Cypress.env('itsMe')) {
             return
         }
+        cy.intercept('**/document/List*').as('documentList')
+        cy.intercept('**/document/file*').as('documentFile')
+
         var btnCount = 0
         cy.get('tbody > tr > td > button.btn-outline-info').its('length').then((result) => {
             // 統計按鈕總數
@@ -1148,9 +1159,17 @@ context('文件預覽', () => {
             for (var i = 0; i < btnCount; i++) {
                 const $btn = cy.get('tbody > tr > td > button.btn-outline-info').eq(i)
 
+                // 按 請確認是否預覽下份文件
+                cy.isElementExist('app-yes-no-dialog button.btn.btn-primary').then((isExist) => {
+                    if (isExist) {
+                        cy.get('app-yes-no-dialog button.btn.btn-primary').click()
+                    } else {
+                        $btn.click()
+                    }
+                })
+                
                 // loading pdf
-                $btn.click()
-                cy.wait(shortSleep).then( _ => {
+                cy.wait('@documentFile').then( _ => {
                     cy.isElementExist('.btn.btn-secondary').then((isExist) => {
                         if (isExist) {
                             // 關閉pdf
@@ -1158,14 +1177,9 @@ context('文件預覽', () => {
                         } else {
                             // 迴圈按 下一頁
                             cy.pdfNextStepLoop()
-
-                            // 按 同意
-                            cy.get('.btn.btn-success').click()
-
                         }
                     })
                 })
-
             }
         })
 

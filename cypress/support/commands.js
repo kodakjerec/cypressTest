@@ -74,18 +74,18 @@ Cypress.Commands.add('pdfNextStepLoop', () => {
           cy.get('app-preview-dialog > .modal-body').scrollTo('bottom', { easing: 'linear', duration: waitingTime }).click();     
               
           // 有關閉, 直接關閉結束
-          cy.isElementExist('app-preview-dialog > .modal-footer > .row > div > .btn.btn-secondary').then((isExist) => {
+          cy.isElementExist('app-preview-dialog button.btn-secondary').then((isExist) => {
             if (isExist) {
-              cy.get('app-preview-dialog > .modal-footer > .row > div > .btn.btn-secondary').click();
+              cy.get('app-preview-dialog button.btn-secondary').click();
               needClick = false;
             } else {
               // 有下一頁
-              cy.isElementExist('app-preview-dialog > .modal-footer > .row > div > .btn.btn-primary').then((isExist) => {
+              cy.isElementExist('app-preview-dialog button.btn.btn-primary').then((isExist) => {
                 if (isExist) {
-                  cy.get('app-preview-dialog > .modal-footer > .row > div > .btn.btn-primary').click();
+                  cy.get('app-preview-dialog button.btn.btn-primary').click();
                   needClick = true;
                 } else {
-                  cy.get('app-preview-dialog > .modal-footer > .row > div > .btn.btn-success').click();
+                  cy.get('app-preview-dialog button.btn.btn-success').click();
                   needClick = false;
                 }
               });
