@@ -9,7 +9,7 @@ var longSleep = 1500
 var pdfWaiting = 300
 
 context('輸入測試', () => {
-    var newRecord = false // 新增 or 修改
+    var newRecord = true // 新增 or 修改
     var editOrderNo = 1
 
     /**
@@ -330,14 +330,12 @@ context('資料輸入', () => {
                 } else {
                     findItem.click()
                 }
+                // 點左邊選單, 等待系統讀取合約檔案
+                cy.wait(longSleep)
 
                 // 要保書填寫說明
-                // 如果有任何警告視窗,那就按
-                cy.isElementExist('app-preview-dialog button.btn-primary').then((isExist) => {
-                    if (isExist) {
-                        cy.get('app-preview-dialog button.btn-primary').click()
-                    }
-                })
+                // 迴圈按 下一頁
+                cy.pdfNextStepLoop()
 
                 // 身心障礙
                 cy.isElementExist('input[formcontrolname="question_1"]').then((isExist) => {
@@ -1101,14 +1099,15 @@ context('資料輸入', () => {
         }
 
         cy.wait(shortSleep)
+        cy.intercept('**/case/flow-step*').as('caseFlowStep')
+        cy.intercept('**/insurance/updateInsuranceRecord*').as('checkUpdateRecord')
+        
         // 是否進入文件預覽
         cy.isElementExist('app-yes-no-dialog button.btn-primary').then((isExist) => {
             if (isExist) {
                 cy.get('app-yes-no-dialog button.btn-primary').click()
             } else {
                 // 主動按下 檢核儲存
-                cy.intercept('**/case/flow-step*').as('caseFlowStep')
-                cy.intercept('**/insurance/updateInsuranceRecord*').as('checkUpdateRecord')
                 cy.get('div.page__content__btn.bottom-0.end-0 > button.btn-danger').click()
                 cy.wait('@checkUpdateRecord').then( (interception) => {
                     // 是否進入文件預覽

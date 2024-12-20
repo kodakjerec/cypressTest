@@ -1,8 +1,8 @@
 module.exports = {
   'projectId': '16ujsm',
   e2e: {
-    baseUrl: 'https://mpos.transglobe.com.tw/',
-    // baseUrl: 'http://10.67.67.108/',
+    // baseUrl: 'https://mpos.transglobe.com.tw/',
+    baseUrl: 'http://10.67.67.108/',
     defaultCommandTimeout: 1000,
     trashAssetsBeforeRuns: false,
     testIsolation: false,
