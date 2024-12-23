@@ -25,6 +25,12 @@ pipeline {
             }
         }
         
+        stage('Install Cypress') {
+            steps {
+                sh 'npx cypress install'
+            }
+        }
+        
         stage('Run Cypress Tests') {
             steps {
                 sh 'npx cypress run --spec "cypress/e2e/2-UAT/0.0.0-sample.cy.js"'
