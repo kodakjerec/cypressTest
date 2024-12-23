@@ -43,8 +43,8 @@ context('輸入測試', () => {
      * 18-已做完又重新回來
      */
     it('登入', () => {
-        cy.visit('/mbis2/#/login')
-        // cy.visit('/mbis/#/login?admin=TGL@70817744@tgl')
+        // cy.visit('/mbis2/#/login')
+        cy.visit('/mbis/#/login?admin=TGL@70817744@tgl')
         cy.get('#uname').type(testData.userId)
         cy.get('#pin').type(testData.pin)
         solver()
