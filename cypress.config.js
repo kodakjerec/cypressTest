@@ -4,7 +4,7 @@ module.exports = {
     // baseUrl: 'https://mpos.transglobe.com.tw/',
     baseUrl: 'http://10.67.67.108/',
     defaultCommandTimeout: 1000,
-    trashAssetsBeforeRuns: false,
+    trashAssetsBeforeRuns: true,
     testIsolation: false,
     experimentalInteractiveRunEvents: true,
     expertmentalStudio: true,

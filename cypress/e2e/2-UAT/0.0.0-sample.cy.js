@@ -1109,17 +1109,19 @@ context('資料輸入', () => {
             } else {
                 // 主動按下 檢核儲存
                 cy.get('div.page__content__btn.bottom-0.end-0 > button.btn-danger').click()
+
+                // 如果有任何警告視窗,那就按
+                cy.isElementExist('app-base-dialog button.btn-primary').then((isExist) => {
+                    if (isExist) {
+                        cy.get('app-base-dialog button.btn-primary').click()
+                    }
+                })
+
                 cy.wait('@checkUpdateRecord').then( (interception) => {
                     // 是否進入文件預覽
                     cy.isElementExist('app-yes-no-dialog button.btn-primary').then((isExist) => {
                         if (isExist) {
                             cy.get('app-yes-no-dialog button.btn-primary').click()
-                        }
-                    })
-                    // 如果有任何警告視窗,那就按
-                    cy.isElementExist('app-base-dialog button.btn-primary').then((isExist) => {
-                        if (isExist) {
-                            cy.get('app-base-dialog button.btn-primary').click()
                         }
                     })
                 })
@@ -1168,7 +1170,7 @@ context('文件預覽', () => {
                 })
                 
                 // loading pdf
-                cy.wait('@documentFile').then( _ => {
+                cy.wait('@documentFile').wait(shortSleep).then( _ => {
                     cy.isElementExist('.btn.btn-secondary').then((isExist) => {
                         if (isExist) {
                             // 關閉pdf

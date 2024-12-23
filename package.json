@@ -1,4 +1,11 @@
 {
+  "name": "cypress-test",
+  "version": "1.0.0",
+  "scripts": {
+    "open": "npx cypress open",
+    "runall": "npx cypress run",
+    "run": "npx cypress run --spec 'cypress/e2e/2-UAT/0.0.0-sample.cy.js' "
+  },
   "dependencies": {
     "cypress": "^13.16.0"
   }
