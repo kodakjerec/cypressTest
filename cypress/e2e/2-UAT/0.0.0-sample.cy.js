@@ -43,12 +43,21 @@ context('輸入測試', () => {
      * 18-已做完又重新回來
      */
     it('登入', () => {
+        cy.intercept('GET','https://tglciben.transglobe.com.tw/ciben/cibenwfs.js', {
+            statuscode:200,
+            body:''
+        })
+        cy.intercept('**/auth/captcha*').as('captcha')
+        cy.intercept('**/auth/login*').as('authLogin')
         // cy.visit('/mbis2/#/login')
         cy.visit('/mbis/#/login?admin=TGL@70817744@tgl')
-        cy.get('#uname').type(testData.userId)
+
+        cy.wait('@captcha')
+        cy.get('#uname').type(testData.userId).wait(shortSleep)
         cy.get('#pin').type(testData.pin)
         solver()
-        cy.get('.btn').click().wait(longSleep)
+        cy.get('.btn').click()
+        cy.wait('@authLogin')
     })
 
     it('新增 行動投保', () => {

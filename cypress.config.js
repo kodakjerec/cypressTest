@@ -3,6 +3,7 @@ module.exports = {
   e2e: {
     baseUrl: 'https://mpos.transglobe.com.tw/',
     // baseUrl: 'http://10.67.67.108/',
+    port: 9091,
     defaultCommandTimeout: 1000,
     trashAssetsBeforeRuns: true,
     testIsolation: false,
@@ -17,6 +18,10 @@ module.exports = {
     screenshots: {
       enabled: true,
       on: 'failure'
-    }
+    },
+    setupNodeEvents(on, config) {
+      console.log(config)
+      // e2e testing node events setup code
+    },
   },
 }

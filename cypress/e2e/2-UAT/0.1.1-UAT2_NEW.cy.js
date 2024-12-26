@@ -1,7 +1,7 @@
 /* eslint-disable cypress/unsafe-to-chain-command */
 /* eslint-disable cypress/no-unnecessary-waiting */
 /* eslint-disable cypress/no-assigning-return-values */
-import testData from '../../fixtures/2-UAT/0.0.0-sample.json'
+import testData from '../../fixtures/2-UAT/0.1.1-UAT.json'
 import { solver } from '../../support/CAPTCHAsolver.js'
 
 var shortSleep = 1000
